@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>添加点标记</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <style>
+      body,
+      html,
+      #container {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: '微软雅黑';
+      }
+    </style>
+    <script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=您的密钥"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>
+<script>
+  var map = new BMapGL.Map('container') // 创建Map实例
+  map.centerAndZoom(new BMapGL.Point(118.17466, 39.673569), 13) // 初始化地图,设置中心点坐标和地图级别
+  map.enableScrollWheelZoom(true) // 开启鼠标滚轮缩放
+  // 创建带标注的点
+  makePoint(118.17466, 39.673569, '唐山师范学院', map, function (e) {
+    // 回调
+    console.log(e)
+  })
+  // 创建点
+  function makePoint(long, lat, str, mapObject, callback) {
+    var point = new BMapGL.Point(long, lat)
+    var marker = new BMapGL.Marker(point) // 创建标注
+    mapObject.addOverlay(marker)
+    var label = new BMapGL.Label(makeBubl(str), {
+      // 创建文本标注
+      position: point, // 设置标注的地理位置
+      offset: new BMapGL.Size(-50, -60) // 设置标注的偏移量
+    })
+    label.setStyle({
+      // 设置label的样式
+      border: '2px solid #fff'
+    })
+    console.log(label)
+    mapObject.addOverlay(label)
+    marker.addEventListener('click', function (e) {
+      callback(e)
+    })
+  }
+  // 创建标注
+  function makeBubl(str) {
+    let html = ''
+    html +=
+      '<div style="width:150px;text-align:center;padding:0px 10px;white-space: pre-wrap;border:5px solid #171e39; position:relative;background-color:#171e39;color:#fff">' +
+      '<span style="width:0; height:0; font-size:0; overflow:hidden; position:absolute;border-width:10px; border-style:solid dashed dashed; border-color:#171e39 transparent transparent;left:28px; bottom:-20px;"></span>' +
+      str +
+      '</div>'
+    return html
+  }
+</script>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用css创建多种奇形怪状的图案</title>
+  </head>
+  <style>
+    html,
+    body {
+      width: 100vw;
+      height: 100vh;
+    }
+    #container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .block label::before {
+      display: inline-block;
+      margin-right: 4px;
+      color: #ff4d4f;
+      font-size: 14px;
+      font-family: SimSun, sans-serif;
+      line-height: 1;
+      content: '*';
+    }
+    .block label::after {
+      content: ':';
+      position: relative;
+      top: -0.5px;
+      margin: 0 8px 0 2px;
+    }
+    .btn {
+      margin: 8px auto;
+      flex-shrink: 0;
+      width: 160px;
+      height: 64px;
+    }
+    .rect {
+      background: #f6ed8d;
+    }
+
+    .circle {
+      border-radius: 64px;
+      background: #7de3c8;
+    }
+    .parallelogram {
+      position: relative;
+      width: 160px;
+      height: 64px;
+    }
+    .parallelogram::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: #03f463;
+      transform: skewX(30deg);
+      z-index: -1;
+    }
+    .parallelogram-1 {
+      width: 240px;
+      background: linear-gradient(45deg, transparent 22%, #04e6fb 22%, #9006fb 78%, transparent 0);
+    }
+    .trapezoid {
+      position: relative;
+      width: 160px;
+      height: 64px;
+    }
+    .trapezoid::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: perspective(40px) rotateX(10deg);
+      transform-origin: bottom;
+      background: #ff9800;
+    }
+
+    .notching {
+      background: linear-gradient(135deg, transparent 10px, #ff1493 0);
+      background-repeat: no-repeat;
+    }
+    .notching.surrounding {
+      background: linear-gradient(135deg, transparent 10px, #ff1493 0) top left,
+        linear-gradient(-135deg, transparent 10px, #ff1493 0) top right,
+        linear-gradient(-45deg, transparent 10px, #ff1493 0) bottom right,
+        linear-gradient(45deg, transparent 10px, #ff1493 0) bottom left;
+      background-size: 50% 50%;
+      background-repeat: no-repeat;
+    }
+    .clip-notching {
+      background: linear-gradient(45deg, #f9d9e7, #ff1493);
+      clip-path: polygon(
+        15px 0,
+        calc(100% - 15px) 0,
+        100% 15px,
+        100% calc(100% - 15px),
+        calc(100% - 15px) 100%,
+        15px 100%,
+        0 calc(100% - 15px),
+        0 15px
+      );
+    }
+    .clip-diamond {
+      background: linear-gradient(15deg, #9fa, #f09);
+      /* 裁剪多边形， x / 2,  0 */
+      clip-path: polygon(
+        32px 0,
+        calc(100% - 32px) 0,
+        100% 32px,
+        100% calc(100% - 32px),
+        calc(100% - 32px) 100%,
+        32px 100%,
+        0 calc(100% - 32px),
+        0 32px
+      );
+    }
+    /* 箭头 */
+    .arrow {
+      background: linear-gradient(-135deg, transparent 22px, #04e6fb 22px, #65ff9a 100%) top right,
+        linear-gradient(-45deg, transparent 22px, #04e6fb 22px, #65ff9a 100%) bottom right;
+      background-size: 100% 50%;
+      background-repeat: no-repeat;
+    }
+
+    .clip-arrow {
+      background: linear-gradient(45deg, #04e6fb, #65ff9a);
+      clip-path: polygon(
+        0 0,
+        30px 50%,
+        0 100%,
+        calc(100% - 30px) 100%,
+        100% 50%,
+        calc(100% - 30px) 0
+      );
+    }
+    .fishtail-arrow {
+      height: 80px;
+      background: linear-gradient(to left top, transparent 22px, #f22 24px, #22f066 100%);
+      clip-path: polygon(
+        0 24px,
+        calc(100% - 50px) 24px,
+        calc(100% - 72px) 0,
+        calc(100%) calc(50%),
+        calc(100% - 72px) calc(100% ),
+        calc(100% - 50px) calc(100% - 24px),
+        0 calc(100% - 24px)
+      );
+    }
+    /* 内圆 */
+    .inset-circle {
+      background-size: 70% 70%;
+      background-image: radial-gradient(
+          circle at 100% 100%,
+          transparent 0,
+          transparent 12px,
+          #2179f5 13px
+        ),
+        radial-gradient(circle at 0 0, transparent 0, transparent 12px, #2179f5 13px),
+        radial-gradient(circle at 100% 0, transparent 0, transparent 12px, #2179f5 13px),
+        radial-gradient(circle at 0 100%, transparent 0, transparent 12px, #2179f5 13px);
+      background-repeat: no-repeat;
+      background-position: right bottom, left top, right top, left bottom;
+    }
+
+    .mask-inset-circle {
+      background: linear-gradient(45deg, #2179f5, #e91e63);
+      mask: radial-gradient(circle at 100% 100%, transparent 0, transparent 12px, #2179f5 13px),
+        radial-gradient(circle at 0 0, transparent 0, transparent 12px, #2179f5 13px),
+        radial-gradient(circle at 100% 0, transparent 0, transparent 12px, #2179f5 13px),
+        radial-gradient(circle at 0 100%, transparent 0, transparent 12px, #2179f5 13px);
+      mask-repeat: no-repeat;
+      mask-position: right bottom, left top, right top, left bottom;
+      mask-size: 70% 70%;
+    }
+
+    .skew {
+      position: relative;
+      width: 120px;
+    }
+    .skew::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 10px;
+      background: orange;
+      transform: skewX(15deg);
+    }
+    .skew::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -13px;
+      width: 100px;
+      height: 64px;
+      border-radius: 10px;
+      background: orange;
+    }
+
+    .outside-circle {
+      position: relative;
+      background: #e91e63;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .outside-circle::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: -20px;
+      bottom: 0;
+      background: #000;
+      background: radial-gradient(circle at 0 0, transparent 20px, #e91e63 21px);
+    }
+    .outside-circle::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: -20px;
+      bottom: 0;
+      background: #000;
+      background: radial-gradient(circle at 100% 0, transparent 20px, #e91e63 21px);
+    }
+  </style>
+  <body>
+    <div id="container">
+      <div class="block">
+        <label>正常的图案- 矩形、圆角</label>
+        <div>
+          <div class="btn rect"></div>
+          <div class="btn circle"></div>
+        </div>
+      </div>
+      <div class="block">
+        <label>梯形与平行四边形</label>
+        <div>
+          <div class="btn parallelogram">使用伪元素实现Parallelogram</div>
+          <div class="btn parallelogram-1">使用背景Parallelogram</div>
+
+          <div class="btn trapezoid">Trapezoid</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <label>切角 -- 纯色背景与渐变色背景</label>
+        <div>
+          <div class="btn notching">notching</div>
+          <div class="btn notching surrounding">surrounding notching</div>
+          利用 clip-path 实现渐变背景的切角图形
+          <div class="btn clip-notching">clip-notching</div>
+          <div class="btn clip-diamond">clip-diamond</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <label>箭头按钮</label>
+        <div>
+          <div class="btn arrow">arrow</div>
+          <div class="btn clip-arrow">arrow</div>
+          <div class="btn fishtail-arrow">arrow</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <label>内切圆角</label>
+        <div>
+          <div class="btn inset-circle">inset-circle</div>
+          <div class="btn mask-inset-circle">借助 mask 实现渐变的内切圆角按钮</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <label>圆角不规则矩形</label>
+        <div>
+          <div class="btn skew">Skew</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <label>外圆角按钮</label>
+        <div>
+          <div class="btn outside-circle">outside-circle</div>
+        </div>
+      </div>
+    </div>
+
+    <footer> 文中案例来源于：https://github.com/chokcoco/iCSS </footer>
+  </body>
+</html>

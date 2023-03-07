@@ -1,0 +1,142 @@
+/*
+ * @Author: CaiPeng
+ * @Date: 2022-06-06 10:25:04
+ * @LastEditors: caipeng
+ * @LastEditTime: 2022-06-09 19:44:46
+ * @FilePath: \SelectDate\src\SelectDate_bk.txt
+ * @Description:
+ */
+import React, { useState, useRef, useEffect } from 'react'
+import { useUpdateEffect, useReactive } from 'ahooks'
+import { CalendarOutlined } from '@ant-design/icons'
+import { DatePicker, Input, Button, Select } from 'antd'
+
+const ProducedDate = ({
+  cRef,
+  readonly,
+  open = false,
+  autoFocus,
+  options = [],
+  value,
+  onChange,
+  onDropdownVisibleChange,
+  style,
+  ...others
+}) => {
+  const datePickerRef = useRef()
+  let openValue = useReactive({
+    datePickerOpen: false,
+    selectOpen: false
+  })
+
+  const [dateValue, setDateValue] = useState(value)
+
+  useUpdateEffect(() => {
+    console.log(value)
+    setDateValue(value)
+  }, [value]) // eslint-disable-line
+
+  useUpdateEffect(() => {
+    if (!openValue.datePickerOpen && !openValue.selectOpen) {
+
+    }
+  }, [openValue.datePickerOpen, openValue.selectOpen])
+
+  useEffect(() => {
+    if (autoFocus) {
+      handleFocus()
+    }
+  }, []) // eslint-disable-line
+
+  const handleOpenDate = e => {
+    let { selectOpen } = openValue
+    if (!openValue.datePickerOpen) {
+      datePickerRef && datePickerRef.current && datePickerRef.current.focus()
+    }
+    openValue = {
+      datePickerOpen: !openValue.datePickerOpen,
+      selectOpen: selectOpen ? !selectOpen : selectOpen
+    }
+  }
+
+  const handleDateChange = (date, dateStr) => {
+    setDateValue(dateStr)
+    onChange && onChange(dateStr)
+  }
+
+  const handleFocus = () => {
+    let { datePickerOpen } = openValue
+    openValue = {
+      datePickerOpen: datePickerOpen ? !datePickerOpen : datePickerOpen,
+      selectOpen: !openValue.selectOpen
+    }
+  }
+
+  const handleDateOpenChange = (open) => {
+    if (!open && !openValue.selectOpen) {
+      onDropdownVisibleChange && onDropdownVisibleChange()
+    }
+  }
+
+  const handleDropdownVisibleChange = (open) => {
+    if (!open && !openValue.datePickerOpen) {
+      onDropdownVisibleChange && onDropdownVisibleChange()
+    }
+  }
+  return (
+    <Input.Group compact style={{ position: 'relative', width: '100%' }}>
+      <Select
+        ref={cRef}
+        options={options}
+        // showSearch
+        // autoFocus={autoFocus}
+        disabled={readonly}
+        allowClear
+        // showArrow={false}
+        open={openValue.selectOpen}
+        onFocus={handleFocus}
+        onDropdownVisibleChange={handleDropdownVisibleChange}
+        onBlur={() => openValue.selectOpen = false}
+        onChange={(val, selected) => {
+          // console.log(val, selected)
+          // setDateValue(val)
+          onChange && onChange(val)
+        }}
+        value={dateValue}
+        suffixIcon={
+          <Button
+            type='text'
+            onClick={handleOpenDate}
+            icon={<CalendarOutlined style={{justifyContent: 'start'}}/>}
+          ></Button>
+        }
+        style={{
+          width: '100%',
+          zIndex: 1
+        }}></Select>
+
+      <DatePicker
+        disabled={readonly}
+        allowClear={false}
+        showToday={false}
+        autoFocus
+        ref={datePickerRef}
+        open={openValue.datePickerOpen}
+        onOpenChange={handleDateOpenChange}
+        onBlur={() => openValue.datePickerOpen = false }
+        onChange={handleDateChange}
+        style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          zIndex: -1,
+          boxShadow: 'none'
+        }}
+      />
+    </Input.Group>
+  )
+}
+
+export default React.memo(ProducedDate)

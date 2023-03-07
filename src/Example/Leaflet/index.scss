@@ -1,0 +1,25 @@
+.attribute-input-left{
+  margin-bottom: 4px;
+  position: relative;
+  &.required{
+    &::before {
+      content: '*';
+      color: red;
+      position: absolute;
+      left: -8px;
+      top: 1px;
+    }
+  }
+}
+.attribute-input-required{
+  color: red;
+  width: 10px;
+  margin-left: -10px;
+}
+.map {
+  width: 100% !important;
+  height: 100% !important;
+  .anchorBL:not(.BMap_noprint) {
+    display: none;
+  }
+}

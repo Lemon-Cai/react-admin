@@ -1,0 +1,272 @@
+<!--
+ * @Author: CaiPeng
+ * @Date: 2023-03-03 16:56:28
+ * @LastEditors: caipeng
+ * @LastEditTime: 2023-03-06 10:22:45
+ * @FilePath: \React\SelectDate\src\StaticExample\IntersectionObserver和MutationObserver使用.html
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>IntersectionObserver和MutationObserver</title>
+    <style>
+      html,
+      body {
+        width: 100vw;
+        height: 100vh;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      #container {
+        width: 100vw;
+        height: 100vh;
+      }
+      .img-wrapper {
+        margin: 0 auto;
+        width: 800px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px 20px;
+      }
+      .img-wrapper img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+      }
+
+      .mod_banner {
+        width: 100%;
+        height: 60px;
+      }
+      .banner {
+        padding: 0 12px;
+        width: 100%;
+        line-height: 60px;
+        background-color: #f1efef;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="mutationObserver">
+        <p>观察节点1</p>
+        <p>观察节点2</p>
+        <p>观察节点3</p>
+      </div>
+      <p>这块是img区域</p>
+      <div class="img-wrapper"></div>
+
+      <div class="mod_banner">
+        <div class="banner">这是一个吸顶元素</div>
+      </div>
+    </div>
+
+    <script>
+      function createImage(num = 100) {
+        let fragment = document.createDocumentFragment()
+        for (let index = 0; index < num; index++) {
+          let img = new Image()
+          img.index = index
+          img.src = ''
+          img.dataset.lazy =
+            'https://cdn.nlark.com/yuque/0/2022/png/2365629/1659925414812-313efc55-34a3-47a8-a2c1-e9899a2b581b.png'
+          img.alt = '图片示例'
+          fragment.appendChild(img)
+        }
+        document.querySelector('.img-wrapper').appendChild(fragment)
+      }
+
+      function lazyLoad($imgList = [], ops = {}) {
+        let observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                let target = entry.target
+                const src = target.getAttribute('data-lazy')
+
+                if (src) {
+                  target.setAttribute('src', src) // 真正加载图片
+                }
+                observer.unobserve(target) // 解除观察
+              }
+            })
+          },
+          {
+            root: null, // 默认document
+            rootMargin: '0px', // 根 (root) 元素的外边距
+            threshold: 1.0, // number or number[]，值在 0.0 - 1.0 。 target 元素和 root 元素相交程度达到该值的时候 IntersectionObserver 注册的回调函数将会被执行
+            ...ops
+          }
+        )
+        Array.prototype.forEach.call($imgList, function (node) {
+          if (node.getAttribute('src')) return
+          observer.observe(node)
+        })
+      }
+      window.onload = function () {
+        // 在dom中插入图片
+        createImage(500)
+        lazyLoad(document.querySelectorAll('.img-wrapper img[data-lazy]'), {
+          threshold: 0.5,
+          //  100px 预加载高度
+          rootMargin: `0px 0px 100px 0px`
+        })
+
+        // 吸顶
+        fixBanner(document.querySelector('.mod_banner'), document.querySelector('.banner'))
+
+        // mutationObserver
+        createMutationObserver()
+      }
+
+      function fixBanner($observeEle, $fixEle) {
+        const $ele = $fixEle
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                $ele.style.cssText = ''
+              } else {
+                $ele.style.cssText = 'position: fixed; top: 0; left: 0'
+              }
+            })
+          },
+          {
+            threshold: 1 // threshold 设置为 1 表示目标元素完全可见时触发回调函数
+          }
+        )
+
+        observer.observe($observeEle) // 开始观察
+      }
+
+      function createMutationObserver() {
+        let observer = new MutationObserver(function (mutations) {
+          mutations.forEach(mutation => {
+            /**
+           * mutation: 
+              type String  如果是属性发生变化,则返回attributes.如果是一个CharacterData节点发生变化,则返回characterData,如果是目标节点的某个子节点发生了变化,则返回childList.
+              target  Node 返回此次变化影响到的节点,具体返回那种节点类型是根据type值的不同而不同的. 如果type为attributes,则返回发生变化的属性节点所在的元素节点,如果type值为characterData,则返回发生变化的这个characterData节点.如果type为childList,则返回发生变化的子节点的父节点.
+              addedNodes NodeList 返回被添加的节点,或者为null.
+              removedNodes NodeList 返回被删除的节点,或者为null.
+              previousSibling  Node 返回被添加或被删除的节点的前一个兄弟节点,或者为null.
+              nextSibling Node 返回被添加或被删除的节点的后一个兄弟节点,或者为null.
+              attributeName   String  返回变更属性的本地名称,或者为null.
+              attributeNamespace  String  返回变更属性的命名空间,或者为null.
+              oldValue  String    根据type值的不同,返回的值也会不同.如果type为 attributes,则返回该属性变化之前的属性值.如果type为characterData,则返回该节点变化之前的文本数据.如果type为childList,则返回null.
+          */
+
+            if (mutation.type === 'characterData') {
+              // target & object === typeof(mutation.target)
+              // console.log("A child node has been added OR removed.", mutation.target, typeof(mutation.target));
+              // console.log("[...mutation.addedNodes].length", [...mutation.addedNodes].length);
+              // console.log("[...mutation.removedNodes].length", [...mutation.removedNodes].length);
+              // if (mutation.target && [...mutation.addedNodes].length) {
+              //     // [...mutation.addedNodes].length
+              //     console.log(`A child node ${mutation.target} has been added!`, mutation.target);
+              // }
+              // if (mutation.target && [...mutation.removedNodes].length) {
+              //     // [...mutation.removedNodes].length
+              //     console.log(`A child node ${mutation.target} has been removed!`, mutation.target);
+              // }
+            }
+            if (mutation.type === 'childList') {
+              if (mutation.target && [...mutation.addedNodes].length) {
+                console.log(`A child node ${mutation.target} has been added!`, mutation.target)
+              }
+              if (mutation.target && [...mutation.removedNodes].length) {
+                console.log(`A child node ${mutation.target} has been removed!`, mutation.target)
+              }
+              // do somwthings
+              let list_values = []
+              list_values = [].slice
+                .call(target.children)
+                .map(function (node) {
+                  return node.innerHTML
+                })
+                .filter(function (str) {
+                  if (str === '<br>') {
+                    return false
+                  } else {
+                    return true
+                  }
+                })
+              console.log(list_values)
+            }
+            if (mutation.type === 'attributes') {
+              console.log('mutation =', mutation)
+              console.log(`The \`${mutation.attributeName}\` attribute was modified.`)
+              // console.log("list style =", list.style);
+              let { width, height } = target.style
+              let style = {
+                width,
+                height
+              }
+              console.log('style =\n', JSON.stringify(style, null, 4))
+            }
+          })
+        })
+
+        let target = document.querySelector('.mutationObserver')
+        // 此对象的配置项描述了 DOM 的哪些变化应该报告给 MutationObserver 的 callback
+        const config = {
+          subtree: true, // 当为 true 时，将会监听以 target 为根节点的整个子树。包括子树中所有节点的属性，而不仅仅是针对 target。默认值为 false
+          childList: true, // 当为 true 时，监听 target 节点中发生的节点的新增与删除（同时，如果 subtree 为 true，会针对整个子树生效）。默认值为 false。
+          attributes: true // 当为 true 时观察所有监听的节点属性值的变化。默认值为 true，当声明了 attributeFilter 或 attributeOldValue，默认值则为 false。
+          // attributeFilter: [], // 一个用于声明哪些属性名会被监听的数组。如果不声明该属性，所有属性的变化都将触发通知。
+          // attributeOldValue: false, // 当为 true 时，记录上一次被监听的节点的属性变化；可查阅`<link href="https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver#%E7%9B%91%E5%90%AC%E5%B1%9E%E6%80%A7%E5%80%BC" />监听属性`值了解关于观察属性变化和属性值记录的详情。默认值为 false。
+          // characterData: true, // 当为 true 时，监听声明的 target 节点上所有字符的变化。默认值为 true，如果声明了 characterDataOldValue，默认值则为 false
+          // characterDataOldValue: false, // 当为 true 时，记录前一个被监听的节点中发生的文本变化。默认值为 false
+        }
+        observer.observe(target, config)
+
+        operateTarget(observer, target)
+      }
+
+      function operateTarget(observer, target) {
+        observer.observe(target, { childList: true }) //childList属性只观察子节点的新建与删除,子节点本身的任何变化都不会去理会
+        target.appendChild(document.createElement('div')) //添加了一个元素子节点,触发回调函数.
+        target.appendChild(document.createTextNode('foo')) //添加了一个文本子节点,触发回调函数.
+        target.removeChild(target.childNodes[0]) //移除第一个子节点,触发回调函数.
+        target.childNodes[0].appendChild(document.createElement('div')) //为第一个子节点添加一个子节点,不会触发回调函数,如果需要触发,则需要设置subtree属性为true.
+
+        observer.observe(target, { childList: true, subtree: true }) //subtree属性让观察行为进行"递归",这时,以target节点为根节点的整棵DOM树发生的变化都可能会被观察到
+        observer.observe(document, { childList: true, subtree: true }) //如果target为document或者document.documentElement,则当前文档中所有的节点添加与删除操作都会被观察到
+        observer.observe(document, {
+          childList: true,
+          attributes: true,
+          characterData: true,
+          subtree: true
+        }) //当前文档中几乎所有类型的节点变化都会被观察到(包括属性节点的变化和文本节点的变化等)
+
+        observer.observe(target, { childList: true }) //假设此时target的outHTML内容为<div>foo<div>,则:
+        target.childNodes[0].data = 'bar' //不会触发回调函数,因为childList只观察节点的新建与删除,而这里target节点的子节点仍然只有一个,没有多,没有少
+        observer.observe(target, { childList: true, characterData: true }) //加上characterData属性,允许观察文本节点的变化,行不行?
+        target.childNodes[0].data = 'bar' //还是不会触发回调函数,因为发生变化的是target节点的子节点,我们目前的目标节点只有一个,就是target.
+        observer.observe(target, { childList: true, characterData: true, subtree: true }) //加上subtree属性,观察所有后代节点
+        target.childNodes[0].data = 'bar' //触发了回调函数,发生变化的是target节点的文本子节点(必须同时有characterData和subtree属性,才能观察到一个元素目标节点里的文本内容的变化)
+
+        observer.observe(target, { attributes: true }) //只观察目标节点的属性节点
+        target.setAttribute('foo', 'bar') //不管foo属性存在不存在,都会触发回调函数
+        target.setAttribute('foo', 'bar') //即使前后两次的属性值一样,还是会触发回调函数
+        target.removeAttribute('foo') //移除foo属性节点,触发回调函数
+        target.removeAttribute('foo') //不会触发回调函数,因为已经没有属性节点可移除了
+        observer.observe(target, { attributes: true, attributeFilter: ['bar'] }) //指定要观察的属性名
+        target.setAttribute('foo', 'bar') //不会触发回调函数,因为attributeFilter数组不包含"foo"
+        target.setAttribute('bar', 'foo') //触发了回调函数,因为attributeFilter数组包含了"bar"
+      }
+    </script>
+  </body>
+</html>

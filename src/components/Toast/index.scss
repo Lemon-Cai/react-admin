@@ -1,0 +1,57 @@
+.toast {
+  border-radius: 15px;
+  padding: .6rem 4rem;
+  margin: 1rem;
+  position: absolute;
+  letter-spacing: 2px;
+  font-size: 14px;
+
+  .toast-close-btn {
+    position: absolute;
+    right: 6px;
+    top: 3px;
+    font-size: 20px;
+    cursor: pointer;
+    &:hover {
+      opacity: .8;
+    }
+  }
+
+  &-default {
+    background: linear-gradient(to top,#a0a5f3,#758cca);
+    color: #0f2972;
+    .toast-close-btn {
+      color: #0f2972;
+    }
+  }
+  &-info {
+    background: linear-gradient(to top,#eff1ef,#989997);
+    color: #494948;
+    .toast-close-btn {
+      color: #494948;
+    }
+  }
+  &-success {
+    background: linear-gradient(to top,#85e585,#83d136);
+    color: #4a9104;
+    .toast-close-btn {
+      color: #4a9104;
+    }
+  }
+
+  &-warning {
+    background: linear-gradient(to top,#e5b085,#d18e36);
+    color: #864f07;
+    .toast-close-btn {
+      color: #864f07;
+    }
+  }
+
+  &-error {
+    background: linear-gradient(to top,#e59385,#d13636);
+    color: #864f07;
+    .toast-close-btn {
+      color: #864f07;
+    }
+  }
+}

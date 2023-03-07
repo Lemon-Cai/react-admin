@@ -1,0 +1,41 @@
+
+.App {
+  padding: 15px;
+}
+
+.App-header {
+  width: 30%;
+  margin: 0 auto;
+}
+
+.icon-list {
+  list-style: none;
+  margin: 10px 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin: 10px;
+}
+
+.icon > svg {
+  width: 30px;
+  height: 30px;
+}
+
+.icon-item p {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.icon-mark {
+  color: #2db7f5;
+}
