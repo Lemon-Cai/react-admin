@@ -4,11 +4,12 @@
     "create": "node scripts/create.js",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "dumi": "dumi dev"
   },
-  "title": "不可选择日期和时间 - antd@4.20.7",
-  "name": "select-date",
-  "description": "react+vite",
+  "title": "react admin",
+  "name": "react-admin",
+  "description": "打造属于自己的react 开源项目",
   "version": "0.0.0",
   "browserslist": [
     ">0.2%",
@@ -101,6 +102,8 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
+    "dumi": "^2.1.15",
+    "father-build": "^1.22.5",
     "typescript": "^4.8.4"
   },
   "jest": {
