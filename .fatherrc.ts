@@ -1,9 +1,17 @@
+/*
+ * @Author: CaiPeng
+ * @Date: 2023-03-07 14:30:49
+ * @LastEditors: caipeng
+ * @LastEditTime: 2023-03-08 19:35:05
+ * @FilePath: \React\SelectDate\.fatherrc.ts
+ * @Description: 
+ */
 export default {
   entry: 'src/',
   esm: 'babel',
   cjs: 'babel',
   umd: {
-    name: 'lemon'
+    name: 'react-admin'
   },
   extractCSS: true,
   lessInBabelMode: true, // babel 模式下做 less 编译

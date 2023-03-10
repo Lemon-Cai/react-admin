@@ -1,9 +1,48 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 
-import './Checkbox.less'
+import './index.less'
 
-class Checkbox extends Component {
+export interface IPros<T> {
+  prefixCls?: string
+  className?: string
+  style?: React.CSSProperties
+  type?: string
+  title?: string
+  defaultChecked?: boolean
+  disabled?: boolean;
+  onFocus?: React.MouseEventHandler<HTMLElement>
+  onBlur?: React.MouseEventHandler<HTMLElement>
+  onChange?: (e: T) => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
+  onKeyPress?: React.KeyboardEventHandler<HTMLElement>;
+  onKeyUp?: React.KeyboardEventHandler<HTMLElement>;
+}
+
+export interface CheckboxChangeEvent {
+  target: CheckboxChangeEventTarget;
+  stopPropagation: () => void;
+  preventDefault: () => void;
+  nativeEvent: MouseEvent;
+}
+
+
+export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  prefixCls?: string;
+  onChange?: (e: CheckboxChangeEvent) => void
+}
+
+export interface CheckboxChangeEventTarget extends CheckboxProps {
+  checked: boolean;
+}
+
+
+export interface CheckboxRef {
+  focus: () => void;
+  blur: () => void;
+  input: HTMLInputElement | null;
+}
+
+class Checkbox extends Component<CheckboxProps, CheckboxChangeEventTarget> {
   static defaultProps = {
     prefixCls: 'rc-checkbox',
     className: '',
@@ -19,17 +58,19 @@ class Checkbox extends Component {
     onKeyUp() {},
   };
 
-  constructor(props) {
+  private inputRef = createRef<HTMLInputElement | null>(); // like this
+
+  constructor(props: CheckboxProps) {
     super(props);
 
-    const checked = 'checked' in props ? props.checked : props.defaultChecked;
+    const checked = ('checked' in props ? props.checked : props.defaultChecked) as boolean;
 
     this.state = {
       checked,
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props: CheckboxProps, state: CheckboxChangeEventTarget) {
     if ('checked' in props) {
       return {
         ...state,
@@ -40,14 +81,14 @@ class Checkbox extends Component {
   }
 
   focus() {
-    this.input.focus();
+    this.inputRef.current?.focus();
   }
 
   blur() {
-    this.input.blur();
+    this.inputRef.current?.blur();
   }
 
-  handleChange = e => {
+  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { disabled, onChange } = this.props;
     if (disabled) {
       return;
@@ -69,13 +110,13 @@ class Checkbox extends Component {
         preventDefault() {
           e.preventDefault();
         },
-        nativeEvent: e.nativeEvent,
+        nativeEvent: e.nativeEvent as MouseEvent,
       });
     }
   };
 
-  saveInput = node => {
-    this.input = node;
+  saveInput = (node: React.RefObject<HTMLInputElement | null>) => {
+    this.inputRef = node;
   };
 
   render() {
@@ -105,7 +146,7 @@ class Checkbox extends Component {
     const globalProps = Object.keys(others).reduce((prev, key) => {
       if (key.substr(0, 5) === 'aria-' || key.substr(0, 5) === 'data-' || key === 'role') {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = others[key];
+        prev[key as keyof typeof prev] = others[key as keyof typeof prev];
       }
       return prev;
     }, {});
@@ -136,7 +177,9 @@ class Checkbox extends Component {
           onKeyPress={onKeyPress}
           onChange={this.handleChange}
           autoFocus={autoFocus}
+          // @ts-ignore
           ref={this.saveInput}
+          // ref={this.inputRef}
           value={value}
           {...globalProps}
         />

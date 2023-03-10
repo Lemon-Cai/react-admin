@@ -5,12 +5,25 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "dumi": "dumi dev"
+    
+    "docs:start": "cross-env APP_ROOT=dumi dumi dev",
+    "docs:build": "cross-env APP_ROOT=dumi dumi build",
+    "docs:deploy": "gh-pages -d docs-dist"
   },
   "title": "react admin",
   "name": "react-admin",
   "description": "打造属于自己的react 开源项目",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "author": "lemonC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yingliyu/fish-ui.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "React",
+    "dumi"
+  ],
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -102,8 +115,11 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
+    "babel-plugin-import": "^1.13.6",
+    "cross-env": "^7.0.3",
     "dumi": "^2.1.15",
     "father-build": "^1.22.5",
+    "gh-pages": "^5.0.0",
     "typescript": "^4.8.4"
   },
   "jest": {

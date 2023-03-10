@@ -1,3 +1,11 @@
+/*
+ * @Author: CaiPeng
+ * @Date: 2022-06-07 09:10:04
+ * @LastEditors: caipeng
+ * @LastEditTime: 2023-03-08 14:54:24
+ * @FilePath: \React\SelectDate\src\index.js
+ * @Description: 
+ */
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 // import 'antd/dist/antd.css'
@@ -31,7 +39,7 @@ window.SDK.setConfig({
   url: '/platform/logger'
 })
 
-const root = createRoot(document.getElementById('container'))
+const root = createRoot(document.getElementById('root'))
 root.render(
   <ConfigProvider locale={zhCN}>
     <React.StrictMode>
