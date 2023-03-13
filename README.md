@@ -43,3 +43,9 @@ git branch -d 分支名称
 ```
 git config --system --unset credential.helper
 ```
+
+普通cra项目，如果一开始没有使用ts，后续添加ts步骤
+  - ` npm i typescript --D `
+  - ` npm i @types/node @types/react @types/react-dom @types/jest `
+  - ` npx tsc --init ` 会在根目录创建 tsconfig.json
+  - 修改 **tsconfig.json** 解析项目模块

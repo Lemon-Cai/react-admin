@@ -2,7 +2,7 @@
 
 ```tsx
 import React, { useState } from 'react'
-import { DateRange } from 'comp'
+import { DateRange } from '@comp'
 
 export default function Demo() {
   const [dateRange, setDateRange] = useState()
