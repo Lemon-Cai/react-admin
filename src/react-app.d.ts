@@ -2,6 +2,16 @@
 /// <reference types="react" />
 /// <reference types="react-dom" />
 
+// 覆盖antd类型
+declare module "moment" {
+  import { Dayjs } from "dayjs";
+  namespace moment {
+    type Moment = Dayjs;
+  }
+  export = moment;
+  export as namespace moment;
+}
+
 declare namespace NodeJS {
   interface ProcessEnv {
     readonly NODE_ENV: 'development' | 'production' | 'test';

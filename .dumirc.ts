@@ -2,7 +2,7 @@
  * @Author: CaiPeng
  * @Date: 2023-03-08 14:45:57
  * @LastEditors: caipeng
- * @LastEditTime: 2023-03-13 17:59:06
+ * @LastEditTime: 2023-03-14 20:02:32
  * @FilePath: \React\SelectDate\.dumirc.ts
  * @Description: 
  */
@@ -11,26 +11,29 @@ import path from 'path'
 
 console.log('memo.resolve.alias', __dirname)
 
-const BASE_URL = 'react-admin' // '/lemon'
+const BASE_URL = '' // 'react-admin' // '/lemon'
 
 export default defineConfig({
-  favicons: [BASE_URL + '/images/logo.png'],
+  // favicons: [BASE_URL + '/logo.png'],
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
     memo.plugins.delete('copy')
     // console.log('memo.resolve.alias', __dirname)
     memo.module
       .rule('js')
       .test(/\.(js|mjs|jsx|ts|tsx)$/)
-      .include.add(path.join(__dirname, '..', '..', '..', 'src'))
+      // .include.add(path.join(__dirname, '..', 'src'))
+      .include.add(path.join(__dirname, 'src'))
+
       .end()
       .exclude.add(/node_modules/)
       .end()
       .use('babel-loader')
   },
   alias: {
-    '@comp': path.join(__dirname, '..', '..', '..', 'src')
+    // '@comp': path.join(__dirname, '..',  'src')
+    '@comp': path.join(__dirname, 'src')
   },
-  // hash: true, // 避免缓存
+  hash: true, // 避免缓存
   // base: BASE_URL,
   // publicPath: BASE_URL + '/', // 配置 webpack 的 publicPath
   // // 配置输出路径。
@@ -51,8 +54,9 @@ export default defineConfig({
   ],
     // ----主题配置------
   themeConfig: {
-    name: 'React-Admin Component',
-    logo: BASE_URL + '/images/logo.png',
+    name: 'React-Admin',
+    // logo: BASE_URL + '/images/logo.png', // 本地文件读取不到
+    logo: 'https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png',
     darkSwitch: false,
     // sidebar: {
     //   '/guild': [
@@ -94,11 +98,15 @@ export default defineConfig({
       value: [
         {
           title: '教程',
-          link: '/guild'
+          link: '/guide'
         },
         {
           title: '博客',
-          link: '/blog'
+          link: '/blogs'
+        },
+        {
+          title: '数据结构',
+          link: '/data-structure'
         },
         {
           title: '组件',
@@ -106,18 +114,19 @@ export default defineConfig({
         },
         {
           title: 'GitHub',
-          link: 'https://github.com/viewweiwu/amiya'
+          // link: 'https://github.com/viewweiwu/amiya'
+          link: 'https://github.com/CalvinP-Cai/react-admin'
         }
       ]
     }
   },
   // -------重点配置项---------
-  apiParser: {},
+  // apiParser: {},
   resolve: {
     // 配置入口文件路径，API 解析将从这里开始
-    entryFile: './src/components/index.ts',
-    // docDirs: ['docs', path.resolve(__dirname, 'dumi/docs')]
-    // atomDirs: [{ type: 'component', dir: './src/components' }]
+    // entryFile: './src/components/index.ts',
+    docDirs: ['docs'],
+    atomDirs: [{ type: 'component', dir: './src/components' }]
     // includes 2.0废弃了拆分成 docDirs, atomDirs
     // includes: ['docs']
     // locales: [{ id: 'zh-CN', name: '中文' }] // 使用默认值

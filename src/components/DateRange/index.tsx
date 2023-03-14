@@ -1,15 +1,76 @@
 /*
  * @Author: CaiPeng
- * @Date: 2022-02-28 19:07:45
+ * @Date: 2022-11-09 09:36:07
  * @LastEditors: caipeng
- * @LastEditTime: 2023-03-07 19:57:37
+ * @LastEditTime: 2023-03-14 17:01:28
+ * @FilePath: \React\SelectDate\src\components\DateRange\index.tsx
  * @Description: 时间范围选择控件，支持设置区间
  */
 import React, { useState, useMemo, useCallback } from 'react'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs, ManipulateType } from 'dayjs'
 import { DatePicker, Radio, Space } from 'antd'
+import type { RadioChangeEvent } from 'antd';
+import type { RangePickerProps } from 'antd/es/date-picker';
 import { useControllableValue, useUpdateEffect } from 'ahooks'
 import styled from 'styled-components'
+
+/**
+ * 问题：antd日期选择器更换为dayjs后typescript声明文件还要求传参类型为moment
+ // 覆盖antd类型
+  declare module "moment" {
+    import { Dayjs } from "dayjs";
+    namespace moment {
+      type Moment = Dayjs;
+    }
+    export = moment;
+    export as namespace moment;
+  }
+ */
+// import {
+//   PickerProps,
+//   PickerDateProps,
+//   RangePickerProps as BaseRangePickerProps,
+// } from 'antd/lib/date-picker/generatePicker'
+
+// export type DatePickerProps = PickerProps<Dayjs>
+// export type RangePickerProps = BaseRangePickerProps<Dayjs>
+// export type WeekPickerProps = Omit<PickerDateProps<Dayjs>, 'picker'>
+// export type MonthPickerProps = Omit<PickerDateProps<Dayjs>, 'picker'>
+
+
+export interface TimeEnumProp {
+  label: string;
+  name?: string;
+  value: string;
+  default?: boolean
+}
+
+export type DisableProps = {
+  type: ManipulateType;
+  num: number
+}
+
+export type ValueType = RangePickerProps['value'];
+
+export interface ComponentProp {
+  defaultDateType: string;
+  //
+  onDateChange: (dateRange: ValueType, dateString: [string, string] | string) => void;
+  onOpenChange: (arg?: any) => void;
+  // 是否显示禁用日期，配合 disableProps
+  showDisable: boolean;
+  disableProps: DisableProps;
+  disabledDate: (currentDate: Dayjs, dates: ValueType, disableProps: DisableProps) => RangePickerProps['disabledDate'], // 禁用日期
+  layout: string; // inner | outer 自定义快捷选择日期布局方式，默认 inner
+  customShortcut: false, // 是否自定义快捷操作 log: 2022-11-14 开始该参数作废
+  showShortcut: boolean;
+  shortcutOps: Array<TimeEnumProp>;
+  value: ValueType;
+  onSwitchDate: (str: string) =>  ValueType; // Function 自定义快捷操作时，自定义切换方式 当 customShortcut = true 传入该方法，才有效， 当 shortcutOps的枚举值的value不在默认范围类，需自定义
+
+  onChange: () => void;
+  [propName: string]: any
+}
 
 
 const StyledSpace = styled(Space)`
@@ -26,7 +87,7 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 let dateChangeFlag = true
 
 // 默认日期快捷操作枚举值
-const DEFAULT_TIMES_ENUM = [
+const DEFAULT_TIMES_ENUM: Array<TimeEnumProp> = [
   { label: '今日', value: '0', default: true },
   { label: '昨日', value: '1' },
   { label: '本周', value: '2' },
@@ -36,7 +97,7 @@ const DEFAULT_TIMES_ENUM = [
   { label: '近30日', value: '6' }
 ]
 
-const _getDate = type => {
+const _getDate = (type: string): ValueType  => {
   let dateRange
   if (type === '0') {
     // 今日
@@ -60,10 +121,10 @@ const _getDate = type => {
     // 近30
     dateRange = [dayjs().subtract(29, 'd'), dayjs()]
   }
-  return dateRange
+  return dateRange as ValueType
 }
 
-const DateRage = ({
+const DateRange: React.FC<ComponentProp> = ({
   defaultDateType,
   //
   onDateChange,
@@ -87,7 +148,7 @@ const DateRage = ({
   ...restProps
 }) => {
   // 日期类型
-  const [dateType, setDateType] = useState(() => {
+  const [dateType, setDateType] = useState<string | undefined>(() => {
     return defaultDateType ?? shortcutOps.find(o => o.default)?.value
   })
 
@@ -98,8 +159,8 @@ const DateRage = ({
     onChange
   })
 
-  const [dates, setDates] = useState([])
-  const [hackValue, setHackValue] = useState()
+  const [dates, setDates] = useState<ValueType>(null)
+  const [hackValue, setHackValue] = useState<ValueType>()
 
   useUpdateEffect(() => {
     if (showShortcut && Array.isArray(value) && value[0]) {
@@ -108,9 +169,9 @@ const DateRage = ({
     }
   }, [value])
 
-  const _inverseDate = val => {
+  const _inverseDate = (val: ValueType) => {
     let type
-    if (showShortcut && value[0]) {
+    if (showShortcut && Array.isArray(value) && value[0]) {
       let startTime = dayjs(value[0]).format(restProps?.format || 'YYYY-MM-DD')
       let endTime = dayjs(value[1]).format(restProps?.format || 'YYYY-MM-DD')
 
@@ -122,7 +183,7 @@ const DateRage = ({
           date = _getDate(item.value)
         }
         if (
-          date &&
+          date && Array.isArray(date) &&
           `${startTime}~${endTime}` ===
           `${dayjs(date[0]).format(restProps?.format || 'YYYY-MM-DD')}~${dayjs(date[1]).format(
             restProps?.format || 'YYYY-MM-DD'
@@ -138,11 +199,14 @@ const DateRage = ({
   }
 
   const handleDisabledDate = useCallback(
-    currentDate => {
+    (currentDate: Dayjs) => {
       if (disabledDate) {
         return disabledDate(currentDate, dates, disableProps)
       }
-      if (!dates || dates.length === 0) {
+      if (
+        !dates
+        // || dates.length === 0
+      ) {
         return false
       }
       const tooLate =
@@ -151,33 +215,33 @@ const DateRage = ({
       const tooEarly =
         dates[1] &&
         dayjs(currentDate).isBefore(dayjs(dates[1]).subtract(disableProps.num, disableProps.type))
-      return tooLate || tooEarly
+      return tooLate || tooEarly 
     },
     [dates, disableProps, disabledDate]
   )
 
-  const handleOpenChange = open => {
+  const handleOpenChange = (open: boolean) => {
     if (open) {
-      setHackValue([])
-      setDates([])
+      setHackValue(null)
+      setDates(null)
       dateChangeFlag = false
     } else {
       setHackValue(undefined)
     }
     if (!open && dateRange && dateChangeFlag) {
-      setDateType()
+      setDateType(undefined)
       onOpenChange && onOpenChange()
     }
   }
 
-  const handleDateChange = (dateRange, dateString) => {
+  const handleDateChange = (dateRange: ValueType, dateString: [string, string]) => {
     onDateChange && onDateChange(dateRange, dateString)
     dateChangeFlag = true
     setDateRange(dateRange)
   }
 
   const handleSwitchDateType = useCallback(
-    event => {
+    (event: RadioChangeEvent) => {
       // dateChangeFlag = true // 修改日期 先触发 handleOpenChange，在执行当前方法
       const value = event.target.value
       setDateType(value)
@@ -203,7 +267,10 @@ const DateRage = ({
   )
 
   const othersProps = useMemo(() => {
-    let prop = {}
+    let prop: {
+      renderExtraFooter?: () => React.ReactNode;
+      disabledDate?: RangePickerProps['disabledDate']
+    } = {}
     if (showShortcut && layout === 'inner') {
       prop.renderExtraFooter = () => (
         <Radio.Group
@@ -216,7 +283,7 @@ const DateRage = ({
       )
     }
     if (showDisable) {
-      prop.disabledDate = handleDisabledDate
+      prop.disabledDate = handleDisabledDate as RangePickerProps['disabledDate']
     }
     return prop
   }, [
@@ -254,4 +321,13 @@ const DateRage = ({
   )
 }
 
-export default DateRage
+DateRange.defaultProps = {
+  shortcutOps: DEFAULT_TIMES_ENUM,
+  disableProps: {
+    type: 'd',
+    num: 180
+  },
+  layout: 'inner'
+}
+
+export default DateRange

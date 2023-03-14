@@ -2,14 +2,14 @@
  * @Author: CaiPeng
  * @Date: 2023-03-03 14:36:52
  * @LastEditors: caipeng
- * @LastEditTime: 2023-03-03 14:59:05
- * @FilePath: \SelectDate\src\utils\hooks\useFetch.ts
+ * @LastEditTime: 2023-03-14 14:22:25
+ * @FilePath: \React\SelectDate\src\hooks\useFetch.ts
  * @Description: 
  */
 import { useState, useEffect } from 'react'
 
 const UseFetch = (url: string, params = {}, others: object) => {
-  const [data, setData] = useState()
+  const [data, setData] = useState<any>()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const UseFetch = (url: string, params = {}, others: object) => {
       setLoading(false)
     }
     fetchData()
-  }, [url])
+  }, [url, params])
 
   return { data, loading };
 }
