@@ -2,7 +2,7 @@
  * @Author: CaiPeng
  * @Date: 2023-03-08 14:45:57
  * @LastEditors: caipeng
- * @LastEditTime: 2023-03-14 20:02:32
+ * @LastEditTime: 2023-03-20 09:46:46
  * @FilePath: \React\SelectDate\.dumirc.ts
  * @Description: 
  */
@@ -18,16 +18,15 @@ export default defineConfig({
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
     memo.plugins.delete('copy')
     // console.log('memo.resolve.alias', __dirname)
-    memo.module
-      .rule('js')
-      .test(/\.(js|mjs|jsx|ts|tsx)$/)
-      // .include.add(path.join(__dirname, '..', 'src'))
-      .include.add(path.join(__dirname, 'src'))
-
-      .end()
-      .exclude.add(/node_modules/)
-      .end()
-      .use('babel-loader')
+    // memo.module
+    //   .rule('js')
+    //   .test(/\.(js|mjs|jsx|ts|tsx)$/)
+    //   // .include.add(path.join(__dirname, '..', 'src'))
+    //   .include.add(path.join(__dirname, 'src'))
+    //   .end()
+    //   .exclude.add(/node_modules/)
+    //   .end()
+    //   .use('babel-loader')
   },
   alias: {
     // '@comp': path.join(__dirname, '..',  'src')
@@ -121,11 +120,11 @@ export default defineConfig({
     }
   },
   // -------重点配置项---------
-  // apiParser: {},
+  apiParser: {},
   resolve: {
     // 配置入口文件路径，API 解析将从这里开始
-    // entryFile: './src/components/index.ts',
-    docDirs: ['docs'],
+    entryFile: './src/components/index.ts',
+    // docDirs: ['docs'],
     atomDirs: [{ type: 'component', dir: './src/components' }]
     // includes 2.0废弃了拆分成 docDirs, atomDirs
     // includes: ['docs']

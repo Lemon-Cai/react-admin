@@ -1,20 +1,24 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Navigate } from 'react-router-dom'
-
-import { Layout, Menu, Modal, Dropdown, Avatar } from 'antd'
+/*
+ * @Author: CaiPeng
+ * @Date: 2022-11-21 16:58:30
+ * @LastEditors: caipeng
+ * @LastEditTime: 2023-03-20 09:03:36
+ * @FilePath: \React\SelectDate\src\Pages\Main\index.tsx
+ * @Description:
+ */
+import Icon, { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons'
+import { Avatar, Dropdown, Layout, Menu, Modal } from 'antd'
 import type { MenuProps } from 'antd/es/menu'
-
-import Icon, { UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 // import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 
 import styled from 'styled-components'
 
 import request from 'utils/Request'
 
-import logo from 'assets/images/login/logo.svg'
-
-import SideMenu from './SideMenu'
 import './index.scss'
+import SideMenu from './SideMenu'
 
 interface IState {
   firstCollapsed: boolean
@@ -127,7 +131,6 @@ const Main: React.FC = () => {
       secondCollapsed: !state.secondCollapsed
     })
   }
-  
 
   // { item, key, keyPath, domEvent }
   const handleMenuClick: Required<MenuProps>['onClick'] = useCallback(
@@ -179,7 +182,7 @@ const Main: React.FC = () => {
             label: '个人设置'
           },
           {
-            type: 'divider', // Must have
+            type: 'divider' // Must have
           },
           {
             key: 2,
@@ -198,7 +201,7 @@ const Main: React.FC = () => {
   }
 
   // 一级菜单点击
-  const handleFirstMenuClick = ({ key }: { key: string}) => {
+  const handleFirstMenuClick = ({ key }: { key: string }) => {
     setMenusState(prev => ({
       ...prev,
       selectedFirstKeys: [key],
@@ -207,12 +210,7 @@ const Main: React.FC = () => {
   }
 
   if (state.redirectToLogin) {
-    return (
-      <Navigate
-        to='/'
-        replace={true}
-      />
-    )
+    return <Navigate to='/' replace={true} />
   }
 
   return (
@@ -255,10 +253,7 @@ const Main: React.FC = () => {
                 <Menu.Item key={item.id}>
                   {/* Icon自定组件 错误用法 */}
                   {/* <Icon component={<PieChartSvg />} /> */}
-                  <Icon
-                    component={PieChartSvg}
-                    style={{ fontSize: '16px' }}
-                  />
+                  <Icon component={PieChartSvg} style={{ fontSize: '16px' }} />
                   <span>{item.name}</span>
                 </Menu.Item>
               ))}
@@ -284,11 +279,7 @@ const Main: React.FC = () => {
               overlay={setting_menu}
               onOpenChange={handleVisibleChange}
               open={state.visible}>
-              <Avatar
-                icon={<UserOutlined />}
-                size={42}
-                className='user-avatar'
-              />
+              <Avatar icon={<UserOutlined />} size={42} className='user-avatar' />
             </Dropdown>
           </div>
         </Layout.Header>
@@ -302,14 +293,10 @@ const Main: React.FC = () => {
             collapsed={state.secondCollapsed}
             onCollapse={handleCollapseSecondMenu}>
             <div className='left-nav'>
-              {
-                menusState.selectedFirstMenu && menusState.selectedFirstMenu?.children?.length > 0 && (
-                  <SideMenu
-                    menus={menusState.selectedFirstMenu.children}
-                    onClickMenu={() => {}}
-                  />
-                )
-              }
+              {menusState.selectedFirstMenu &&
+                menusState.selectedFirstMenu?.children?.length > 0 && (
+                  <SideMenu menus={menusState.selectedFirstMenu.children} onClickMenu={() => {}} />
+                )}
             </div>
           </Layout.Sider>
 

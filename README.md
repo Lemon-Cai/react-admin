@@ -112,3 +112,35 @@ dumi踩过的坑
 [UnhandledPromiseRejection: This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not he reason "Error: 加载失败: (-1)[E:\Study\React\init\src\components\index.js [".d.ts",".ts",".tsx","/index.d.ts","/index.ts","/index.tsx","",".js",".jsx","/inde
   code: 'ERR_UNHANDLED_REJECTION'
 } `
+  - 第n次, memo.module.rule('js')这块代码注释
+```
+...
+chainWebpack: (memo, { env, webpack, createCSSRule }) => {
+  memo.plugins.delete('copy')
+  // console.log('memo.resolve.alias', __dirname)
+  memo.module
+    .rule('js')
+    .test(/\.(js|mjs|jsx|ts|tsx)$/)
+    // .include.add(path.join(__dirname, '..', 'src'))
+    .include.add(path.join(__dirname, 'src'))
+    .end()
+    .exclude.add(/node_modules/)
+    .end()
+    .use('babel-loader')
+},
+...
+
+```
+`
+  error - ./.dumi/tmp/dumi/theme/ContextWrapper.tsx:15:0-88
+  Module not found: Error: request argument is not a string
+`
+
+
+TODO:
+[] 文档的发布
+&#x2612; 项目目录的重构
+&#10007; 在项目中添加husky，commitlint
+在项目中集成umi+dva（@reduxjs/toolkit）
+pnpm拆包一个版本
+lerna拆包一个版本

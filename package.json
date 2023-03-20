@@ -6,8 +6,8 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     
-    "docs:start": "cross-env PORT=7788 APP_ROOT=dumi dumi dev",
-    "docs:build": "cross-env APP_ROOT=dumi dumi build",
+    "docs:start": "cross-env PORT=7788 dumi dev",
+    "docs:build": "cross-env dumi build",
     "docs:deploy": "gh-pages -d docs-dist"
   },
   "title": "react admin",
