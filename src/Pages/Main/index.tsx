@@ -2,15 +2,19 @@
  * @Author: CaiPeng
  * @Date: 2022-11-21 16:58:30
  * @LastEditors: caipeng
- * @LastEditTime: 2023-03-20 09:03:36
+ * @LastEditTime: 2023-03-21 10:12:04
  * @FilePath: \React\SelectDate\src\Pages\Main\index.tsx
  * @Description:
  */
-import Icon, { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Dropdown, Layout, Menu, Modal } from 'antd'
-import type { MenuProps } from 'antd/es/menu'
+
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import Icon, {
+  MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined
+} from '@ant-design/icons'
+import { Avatar, Dropdown, Layout, Menu, Modal } from 'antd'
+import type { MenuProps } from 'antd/es/menu'
+
 // import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 
 import styled from 'styled-components'
@@ -84,12 +88,12 @@ const Main: React.FC = () => {
   })
 
   useEffect(() => {
-    ;(async function () {
+    ; (async function () {
       // TODO: 判断是否已经登录，若未登录，重定向到登录页
       let response = await _initMenus()
       setMenusState(response)
     })()
-    return () => {}
+    return () => { }
   }, []) // eslint-disable-line
 
   const _initMenus = async () => {
@@ -222,7 +226,7 @@ const Main: React.FC = () => {
         className='left-nav-container'
         collapsible
         collapsed={state.firstCollapsed}
-        // onCollapse={handleCollapseMenu}
+      // onCollapse={handleCollapseMenu}
       >
         <div className='left-nav'>
           <div
@@ -246,8 +250,8 @@ const Main: React.FC = () => {
               onClick={handleFirstMenuClick}
               mode='inline'
               theme='light'
-              // 放开有警告
-              // inlineCollapsed={state.firstCollapsed}
+            // 放开有警告
+            // inlineCollapsed={state.firstCollapsed}
             >
               {menusState.data.map(item => (
                 <Menu.Item key={item.id}>
@@ -295,7 +299,7 @@ const Main: React.FC = () => {
             <div className='left-nav'>
               {menusState.selectedFirstMenu &&
                 menusState.selectedFirstMenu?.children?.length > 0 && (
-                  <SideMenu menus={menusState.selectedFirstMenu.children} onClickMenu={() => {}} />
+                  <SideMenu menus={menusState.selectedFirstMenu.children} onClickMenu={() => { }} />
                 )}
             </div>
           </Layout.Sider>

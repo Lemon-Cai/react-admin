@@ -31,7 +31,7 @@ const Login: React.FC<Props> = props => {
   }, [])
 
   const _initData = async () => {
-    
+
     // let response = await request({
     //   url: '/platform/getMenuInfos',
     //   // data,
@@ -50,7 +50,7 @@ const Login: React.FC<Props> = props => {
       setState({ ...state, redirectToMain: true })
     }
   }
-  if (state.redirectToMain)  {
+  if (state.redirectToMain) {
     console.log('state', state)
     return <Navigate to="/main" replace={true} />
   }
