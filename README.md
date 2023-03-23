@@ -38,6 +38,13 @@ git branch -a
 ```
 git branch -d 分支名称
 ```
+切换分支，如果不存在则创建分支，如果分支不存在则把分支推送到远程
+```
+git checkout -b your-branch
+git push origin your-branch:your-branch
+```
+
+
 
 删除git项目下当前登录用户
 ```
@@ -135,6 +142,11 @@ dumi踩过的坑
     error - ./.dumi/tmp/dumi/theme/ContextWrapper.tsx:15:0-88
     Module not found: Error: request argument is not a string
   `
+   - dumi安装后通过prettier格式导致 import顺序自动排序
+     在prettierrc中添加配置 
+     ```
+      pluginSearchDirs: false,
+     ```
 
 
 TODO:
