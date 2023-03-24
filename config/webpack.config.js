@@ -19,6 +19,9 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const paths = require('./paths');
 const modules = require('./modules');
 const getClientEnvironment = require('./env');
+
+const externalAlias = require('./alias'); // 拓展自定义的别名
+
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === 'true'
@@ -319,6 +322,7 @@ module.exports = function (webpackEnv) {
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
         ...(modules.webpackAliases || {}),
+        ...(externalAlias || {})
       },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -747,6 +751,9 @@ module.exports = function (webpackEnv) {
             },
           },
         }),
+      // antd5.x 默认使用dayjs， 5.x之前需要手动配置
+      // // 替换antd 的moment 为dayjs
+      // new AntdDayjsWebpackPlugin(),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
