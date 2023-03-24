@@ -8,11 +8,10 @@
     ],
     "paths": {
       // "@@/*": [".dumi/tmp/*"],
-      "@/*": ["./src/*"],
+      // "@/*": ["./packages/*"],
       "assets/*": ["./src/assets/*"],
       "utils/*": ["./src/utils/*"],
       "components/*": ["./src/components/*"],
-      "comp/*": ["../"]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -29,6 +28,6 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "packages/*"
   ]
 }
