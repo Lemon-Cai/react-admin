@@ -1,0 +1,56 @@
+<!--
+ * @Author: CaiPeng
+ * @Date: 2023-03-29 20:36:59
+ * @LastEditors: caipeng
+ * @LastEditTime: 2023-03-29 20:59:35
+ * @FilePath: \React\SelectDate\public\media.html
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <video autoplay playsinline id="player"></video>
+
+  <button id="close">关闭摄像头</button>
+  <button id="snapshot">截取图片</button>
+
+  <canvas width="600px" height="400px" id="picture"></canvas>
+  <script>
+    (function () {
+      let videoPlayer = document.querySelector('#player')
+      let close = document.querySelector('#close')
+      let snapshot = document.querySelector('#snapshot')
+      let canvas = document.querySelector('#picture')
+
+      let mediaStreamTrack
+      if (!navigator.mediaDevices || !navigator.mediaDevices?.getUserMedia) {
+        console.error('浏览器不支持');
+      } else {
+         navigator.mediaDevices.getUserMedia({
+          audio: true, video: true
+        }).then(stream => {
+          // stream: MediaStream实例 
+          mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[1]
+          videoPlayer.srcObject = stream
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+
+      snapshot.addEventListener('click', function () {
+        canvas.getContext('2d').drawImage(videoPlayer, 0, 0)
+      })
+
+      close.addEventListener('click', function () {
+        mediaStreamTrack?.stop?.()
+      })
+    })()
+  </script>
+</body>
+</html>
