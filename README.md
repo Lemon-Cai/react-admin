@@ -156,6 +156,17 @@ dumi踩过的坑
      ```
 
 
+# pnpm安装依赖
+- 全局安装
+  ` pnpm install 模块 -w `
+- 局部安装
+  ` pnpm add 依赖 -D --filter @monorepo/web `
+- 指定模块依赖另一个模块并指定版本号
+  `pnpm install @monorepo/component@workspace --filter @monorepo/web`
+- 不指定版本号
+  ` pnpm install @monorepo/component@* --filter @monorepo/web `
+
+
 TODO:
 
 [ x ] 文档的发布

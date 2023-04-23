@@ -1,33 +1,40 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext", // 目标语法
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
     "paths": {
-      // "@@/*": [".dumi/tmp/*"],
-      // "@/*": ["./packages/*"],
+      "@monorepo/*": [
+        "package/*/src"
+      ], // 即以@monorepo开头的都去该路径下查找，是个数组
+
       "assets/*": ["./src/assets/*"],
       "utils/*": ["./src/utils/*"],
       "components/*": ["./src/components/*"],
     },
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true, // 允许通过es6语法引入commonjs模块
+    // "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "module": "esnext", // 模块格式
+    "moduleResolution": "node", // 模块解析
+    "resolveJsonModule": true, // 解析json模块
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx", // 
+    "baseUrl": ".",// 当前是以该路径进行查找
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true
   },
   "include": [
     "packages/*"
-  ]
+  ],
+  "exclude": ["node_modules", "dist"]
 }

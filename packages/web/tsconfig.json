@@ -1,0 +1,36 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext", // 目标语法
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "paths": {
+      "@": ["./src"],
+      "assets/*": ["./src/assets/*"],
+      "store/*": ["./src/store/*"],
+      "utils/*": ["./src/utils/*"],
+      "components/*": ["./src/components/*"],
+    },
+    // "allowJs": true,
+    // "skipLibCheck": true,
+    // "esModuleInterop": true, // 允许通过es6语法引入commonjs模块
+    // "allowSyntheticDefaultImports": true,
+    // "strict": true,
+    // "forceConsistentCasingInFileNames": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "module": "esnext", // 模块格式
+    // "moduleResolution": "node", // 模块解析
+    // "resolveJsonModule": true, // 解析json模块
+    // "isolatedModules": true,
+    // "noEmit": true,
+    // "jsx": "react-jsx", // 
+    // "baseUrl": ".",// 当前是以该路径进行查找
+  },
+  "include": [
+    "src/*"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

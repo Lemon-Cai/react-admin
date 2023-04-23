@@ -1,15 +1,17 @@
 {
-  "name": "web",
+  "name": "@monorepo/web",
+  "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ../../scripts/start.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@monorepo/components": "workspace:*",
     "dayjs": "^1.11.7"
   }
 }
