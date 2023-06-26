@@ -57,6 +57,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
+    "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.5",
     "postcss": "^8.4.4",
@@ -170,7 +171,7 @@
     ]
   },
   "lint-staged": {
-    "packages/**/*.{js,jsx}": "eslint --max-warnings=0"
+    "packages/**/src/**/*.{js,jsx}": "eslint --max-warnings=0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.0",

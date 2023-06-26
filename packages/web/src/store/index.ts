@@ -22,11 +22,11 @@
 
 // 升级 redux -> @reduxjs/toolkit
 
-import { configureStore, /* MiddlewareArray */ } from '@reduxjs/toolkit'
-import { useDispatch } from 'react-redux'
+import { configureStore, /* MiddlewareArray */ ThunkAction, Action} from '@reduxjs/toolkit'
+// import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { combineReducers } from 'redux'
 
-import Login from './Login'
+import Login from './slicers/Login'
 
 const reducers = combineReducers({
   login: Login
@@ -34,6 +34,7 @@ const reducers = combineReducers({
 
 export const store = configureStore({
   reducer: reducers,
+  devTools: process.env.NODE_ENV !== 'production',
   // 自定义中间件
   // middleware: (getDefaultMiddleware) => {
   //   return getDefaultMiddleware()
@@ -54,9 +55,19 @@ export const store = configureStore({
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-// export type AppDispatch = typeof store.dispatch
-
-
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
-export const useAppDispatch: () => AppDispatch = useDispatch // Export a hook that can be reused to resolve types
+
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>
+
+// 创建hooks
+// export const useAppDispatch: () => AppDispatch = useDispatch // Export a hook that can be reused to resolve types
+
+// export const useAppDispatch = () => useDispatch<AppDispatch>()
+// export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

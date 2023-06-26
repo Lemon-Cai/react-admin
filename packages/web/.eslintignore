@@ -1,0 +1,2 @@
+# 忽略public下的js文件
+public/**/*.js

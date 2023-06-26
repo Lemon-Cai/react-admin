@@ -8,12 +8,12 @@
     ],
     "paths": {
       "@monorepo/*": [
-        "package/*/src"
+        "packages/*/src"
       ], // 即以@monorepo开头的都去该路径下查找，是个数组
 
-      "assets/*": ["./src/assets/*"],
-      "utils/*": ["./src/utils/*"],
-      "components/*": ["./src/components/*"],
+      "@web/*": ["packages/web/src/*"],
+      // "utils/*": ["./src/utils/*"],
+      // "components/*": ["./src/components/*"],
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -34,7 +34,7 @@
     "useDefineForClassFields": true
   },
   "include": [
-    "packages/*"
+    "packages/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }
