@@ -1,3 +1,11 @@
+/*
+ * @Author: CaiPeng
+ * @Date: 2023-06-26 09:43:23
+ * @LastEditors: caipeng
+ * @LastEditTime: 2023-06-26 14:29:40
+ * @FilePath: \React\SelectDate\packages\web\src\mock\handlers.ts
+ * @Description: 
+ */
 import { rest } from 'msw'
 
 const handlers = [
@@ -21,15 +29,15 @@ const handlers = [
     }))
   }),
   // Handles a POST /login request
-  rest.post('/login', (req, res, ctx) => {
-    // Persist user's authentication in the session
-    sessionStorage.setItem('is-authenticated', 'true')
+  // rest.post('/login', (req, res, ctx) => {
+  //   // Persist user's authentication in the session
+  //   sessionStorage.setItem('is-authenticated', 'true')
 
-    return res(
-      // Respond with a 200 status code
-      ctx.status(200),
-    )
-  }),
+  //   return res(
+  //     // Respond with a 200 status code
+  //     ctx.status(200),
+  //   )
+  // }),
   // rest.get('/users/:userId', (req, res, ctx) => {
   // 通过req，获取动态参数
   //   const { userId } = req.params

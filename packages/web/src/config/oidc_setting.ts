@@ -31,7 +31,7 @@ export const OidcSetting: UserManagerSettings = {
   authority: Constants.stsAuthority,
   client_id: Constants.clientId,
   redirect_uri: `${Constants.clientRoot}signin-callback.html`, // # 可以以路由方式提供  客户端应用程序的重定向 URI，用于接收来自 OIDC/OAuth2 提供程序的响应。
-  // silent_redirect_uri: `${Constants.clientRoot}silent_renew.html`, // 包含处理静默续订的代码的页面的 URL。
+  silent_redirect_uri: `${Constants.clientRoot}silent_renew.html`, // 包含处理静默续订的代码的页面的 URL。
 
   post_logout_redirect_uri: `${Constants.clientRoot}`,
   response_type: 'code',  // 必填 OIDC/OAuth2 提供程序所需的响应类型。

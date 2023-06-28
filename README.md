@@ -180,3 +180,76 @@ TODO:
 [ x ]pnpm拆包一个版本
 
 [ x ]lerna拆包一个版本
+
+
+# 项目中集成husky
+
+要在 pnpm 项目中配置 Husky 和 lint-staged，可以按照以下步骤操作：
+
+1. 在项目根目录下运行以下命令安装 husky 和 lint-staged：
+
+   ```
+   pnpm install husky lint-staged --save-dev
+   ```
+
+2. 在项目根目录下创建`.husky`目录，并在该目录下创建`pre-commit`文件（没有后缀），并添加以下内容：
+
+   ```
+   #!/bin/sh
+   . "$(dirname "$0")/_/husky.sh"
+   ```
+
+   这个文件是 Git 钩子的脚本，用于在提交代码前执行相关的命令。
+
+3. 在项目根目录下创建`.lintstagedrc.js`文件，并添加以下内容：
+
+   ```
+   module.exports = {
+     "packages/**/src/**/*.{js,jsx}": [
+       "eslint --fix",
+       "git add"
+     ]
+   };
+   ```
+
+   这个文件用于配置 lint-staged，指定需要在提交代码前执行的命令。上面的配置表示对`packages`目录下所有子项目中的`src`目录下的`.js`和`.jsx`文件进行 ESLint 校验，并自动修复错误。
+
+4. 在每个子项目中，创建一个`.eslintrc.js`文件，并添加 ESLint 的配置。例如：
+
+   ```
+   module.exports = {
+     env: {
+       browser: true,
+       es2021: true
+     },
+     extends: [
+       'eslint:recommended',
+       'plugin:react/recommended'
+     ],
+     parserOptions: {
+       ecmaFeatures: {
+         jsx: true
+       },
+       ecmaVersion: 12,
+       sourceType: 'module'
+     },
+     plugins: [
+       'react'
+     ],
+     rules: {
+       'react/prop-types': 'off'
+     }
+   };
+   ```
+
+   这个文件用于配置 ESLint 规则，可以根据项目需要进行修改。
+
+5. 最后，在项目根目录下运行以下命令设置 Git 钩子：
+
+   ```
+   pnpm run prepare
+   ```
+
+现在，当你在提交代码时，lint-staged 会自动对指定的文件进行 ESLint 校验，并自动修复错误。如果有错误无法自动修复，提交代码会失败，需要先修复错误后再次提交。
+
+注意，上面的配置中允许有警告和错误。如果你想要禁止警告，可以将 ESLint 规则中的警告改为错误，例如将规则`"no-console": "warn"`改为`"no-console": "error"`。

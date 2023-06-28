@@ -1,9 +1,13 @@
 import { rest } from 'msw'
-import type { UserInfo } from '@/app_models/user'
+import type { UserInfo } from '@web/app_models/user'
 
 export const userRes: UserInfo[] = [
   {
+    deptId: '7948643423168365710',
+    dept_name: "开发一组",
+    userId: '7939412640098406297',
     username: 'admin',
+    userFace: 'https://image-test.waiqin365.com/imobii_portal/images/icon/default-face.png',
     password: '123456',
     token: 'asdfghjkl',
     permission: [

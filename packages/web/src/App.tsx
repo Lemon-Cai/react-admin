@@ -1,9 +1,30 @@
-import React from 'react'
+import React, { lazy } from 'react'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
+import type { RouteObject } from 'react-router-dom'
 
-const App: React.FC = () => {
+const Login = lazy(() => import('./pages/Login'))
+const Container = lazy(() => import('./pages/Container'))
+
+const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <Container />
+    // errorElement: <ErrorPage />,
+    // children: [
+    //   ...routes
+    // ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
+    // loader: rootLoader,
+    // errorElement: <ErrorPage />,
+  },
+]
+const router = createHashRouter(routes)
+
+export default function App() {
   return (
-    <div>App</div>
+    <RouterProvider router={router} />
   )
 }
-
-export default App

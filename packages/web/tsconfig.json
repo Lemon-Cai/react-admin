@@ -30,7 +30,8 @@
     // "baseUrl": ".",// 当前是以该路径进行查找
   },
   "include": [
-    "src/*"
+    "src/*",
+    "typings"
   ],
   "exclude": ["node_modules", "dist"]
 }

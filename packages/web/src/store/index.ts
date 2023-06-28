@@ -27,9 +27,11 @@ import { configureStore, /* MiddlewareArray */ ThunkAction, Action} from '@redux
 import { combineReducers } from 'redux'
 
 import Login from './slicers/Login'
+import Tab from './slicers/TabSlice'
 
 const reducers = combineReducers({
-  login: Login
+  login: Login,
+  tab: Tab
 })
 
 export const store = configureStore({
